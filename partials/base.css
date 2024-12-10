@@ -89,60 +89,8 @@ body {
 	flex-direction: column;
 }
 
-header {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: space-between;
-	align-items: baseline;
-	background-color: var(--black);
-	color: var(--white);
-	padding: 2rem 1rem;
-}
-
-header h1 {
-	font-size: var(--h3);
-	margin: 0;
-}
-
-header svg {
-	width: 30px;
-	fill: var(--white);
-}
-
-nav ul {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: center;
-	align-items: center;
-	gap: 2rem;
-}
-
 main {
 	flex-grow: 1;
-}
-
-footer {
-	background-color: var(--black);
-	color: var(--white);
-	text-align: center;
-	padding: 6rem 0;
-}
-
-footer ul {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: center;
-	align-items: center;
-	gap: 3rem;
-}
-
-footer svg {
-	width: 40px;
-	fill: var(--white);
-}
-
-footer a:hover svg {
-	fill: var(--orange);
 }
 
 section {
@@ -152,28 +100,4 @@ section {
 .container {
 	max-width: 1200px;
 	margin: 0 auto;
-}
-
-.services p {
-	text-align: justify;
-}
-
-.services .angular-wizard svg {
-	fill: rgba(234, 2, 88, 1);
-}
-
-.services h2 {
-	display: flex;
-
-	gap: 1rem;
-}
-
-.services svg {
-	fill: var(--black);
-	width: 50px;
-}
-
-.about svg {
-	border-top-right-radius: 150px;
-	border-bottom-right-radius: 150px;
 }

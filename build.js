@@ -2,9 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Define source and output folders
-const srcFolder = path.join(__dirname, '');
+const partialsFolder = path.join(__dirname, 'partials');
 const distFolder = path.join(__dirname, 'dist');
-const outputFile = path.join(distFolder, 'index.html');
 
 // Ensure the dist folder exists
 if (!fs.existsSync(distFolder)) {
@@ -15,11 +14,11 @@ if (!fs.existsSync(distFolder)) {
 const combineHTML = () => {
 	try {
 		// Load the main template file
-		let template = fs.readFileSync(path.join(srcFolder, 'index.html'), 'utf-8');
+		let template = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
 
 		// Replace placeholders with partial HTML files
 		template = template.replace(/@@include\(['"](.+?)['"]\)/g, (match, fileName) => {
-			const filePath = path.join(srcFolder, fileName);
+			const filePath = path.join(__dirname, fileName);
 			if (fs.existsSync(filePath)) {
 				return fs.readFileSync(filePath, 'utf-8');
 			} else {
@@ -29,23 +28,27 @@ const combineHTML = () => {
 		});
 
 		// Write combined HTML to output
-		fs.writeFileSync(outputFile, template, 'utf-8');
-		console.log(`Combined HTML written to ${outputFile}`);
+		fs.writeFileSync(path.join(distFolder, 'index.html'), template, 'utf-8');
+		console.log(`Combined HTML written to ${path.join(distFolder, 'index.html')}`);
 	} catch (err) {
 		console.error('Error combining HTML:', err);
 	}
 };
 
-const copyCSS = () => {
-	fs.copyFile(path.join(srcFolder, 'styles.css'), path.join(distFolder, 'styles.css'), err => {
-		if (err) {
-			console.error('Error copying file:', err);
-		} else {
-			console.log('File copied successfully!');
-		}
-	});
+const combineCSS = () => {
+	try {
+		const styles = ['base.css', 'header.css', 'footer.css', 'services.css', 'about.css']
+			.map(fileName => path.join(partialsFolder, fileName))
+			.map(filePath => fs.readFileSync(filePath, 'utf-8'))
+			.join('\n');
+
+		fs.writeFileSync(path.join(distFolder, 'styles.css'), styles, 'utf-8');
+		console.log(`Combined CSS written to ${path.join(distFolder, 'styles.css')}`);
+	} catch (err) {
+		console.error('Error combining CSS:', err);
+	}
 };
 
 // Run the combining function
 combineHTML();
-copyCSS();
+combineCSS();
