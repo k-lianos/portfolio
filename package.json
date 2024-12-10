@@ -1,15 +1,16 @@
 {
-  "name": "k-lianos",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "svg:optimize" : "svgo ./svg/*"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "prettier": "^3.4.2",
-    "svgo": "^3.3.2"
-  }
+	"name": "k-lianos",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"svg:optimize": "svgo ./svg/*",
+		"format": "npm run svg:optimize && prettier package.json index.html styles.css --write"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"prettier": "^3.4.2",
+		"svgo": "^3.3.2"
+	}
 }
