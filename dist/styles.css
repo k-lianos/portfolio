@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+	/* colors */
+	--black: rgba(51, 46, 46, 1);
+	--white: rgba(255, 247, 243, 1);
+	--orange: rgba(191, 137, 107, 1);
+	--brown: rgba(114, 72, 48, 1);
+
+	/* type scale */
+	--base-size: 1.15rem;
+	--scale: 1.25;
+	--h1: calc(var(--h2) * var(--scale));
+	--h2: calc(var(--h3) * var(--scale));
+	--h3: calc(var(--h4) * var(--scale));
+	--h4: calc(var(--h5) * var(--scale));
+	--h5: calc(var(--h6) * var(--scale));
+	--h6: var(--base-size);
+}
+
+h1 {
+	font-size: var(--h1);
+}
+
+h2 {
+	font-size: var(--h2);
+}
+
+h3 {
+	font-size: var(--h3);
+}
+
+h4 {
+	font-size: var(--h4);
+}
+
+h5 {
+	font-size: var(--h5);
+}
+
+h6 {
+	font-size: var(--h6);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	text-transform: uppercase;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+html {
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+body {
+	background-color: var(--white);
+	font-family: 'Montserrat', sans-serif;
+	font-optical-sizing: auto;
+	color: var(--black);
+	font-weight: 400;
+	font-style: normal;
+	line-height: 1.5;
+	font-size: var(--base-size);
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	flex-grow: 1;
+}
+
+section {
+	padding: 0 0 8% 0;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+header {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	align-items: baseline;
+	background-color: var(--black);
+	color: var(--white);
+	padding: 2rem 1rem;
+}
+
+header h1 {
+	font-size: var(--h3);
+	margin: 0;
+}
+
+header svg {
+	width: 30px;
+	fill: var(--white);
+}
+
+nav ul {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+}
+
+footer {
+	background-color: var(--black);
+	color: var(--white);
+	text-align: center;
+	padding: 6rem 0;
+}
+
+footer ul {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 3rem;
+}
+
+footer svg {
+	width: 40px;
+	fill: var(--white);
+}
+
+footer a:hover svg {
+	fill: var(--orange);
+}
+
+.services p {
+	text-align: justify;
+}
+
+.services h3 {
+	display: flex;
+	gap: 1rem;
+}
+
+.services svg {
+	fill: var(--black);
+	width: 3rem;
+}
+
+.services .services--angular svg {
+	fill: rgba(234, 2, 88, 1);
+}
+
+.services .services--test svg {
+	fill: rgba(21, 194, 19, 1);
+}
+
+.services .services--all-js svg#react {
+	fill: rgba(8, 126, 164, 1);
+}
+
+.services .services--all-js svg#node {
+	fill: rgba(240, 219, 77, 1);
+}
+
+.services .services--all-js svg#vue {
+	fill: rgba(66, 184, 131, 1);
+}
+
+.services span.technology {
+	font-weight: 700;
+	font-style: italic;
+}
+
+.about svg {
+	border-top-right-radius: 150px;
+	border-bottom-right-radius: 150px;
+}
+
+/* Blockquote main style */
+.blockquote {
+	position: relative;
+	font-weight: 700;
+	color: var(--black);
+	padding: 30px 0;
+	width: 100%;
+	max-width: 500px;
+	z-index: 1;
+	margin: 80px auto;
+	align-self: center;
+	border-top: dotted 1px;
+	border-bottom: dotted 1px;
+}
+
+/* Blockquote header */
+.blockquote h2 {
+	text-align: center;
+	position: relative;
+	color: var(--black);
+	font-weight: 700;
+	line-height: 1;
+	margin: 0;
+}
+
+/* Blockquote right double quotes */
+.blockquote:after {
+	position: absolute;
+	content: '”';
+	color: var(--black);
+	font-size: 10rem;
+	line-height: 0;
+	bottom: -43px;
+	right: 30px;
+}
