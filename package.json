@@ -3,14 +3,18 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
+		"build": "node ./build.js",
+		"build:prod": "npm run cleanup && npm run build",
+		"cleanup": "rimraf dist",
 		"svg:optimize": "svgo ./svg/*",
-		"format": "npm run svg:optimize && prettier package.json index.html styles.css --write"
+		"format": "npm run svg:optimize && prettier --write \"{,partials/**/}*.{md,json,css,js,html,yml}\""
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
 		"prettier": "^3.4.2",
+		"rimraf": "^6.0.1",
 		"svgo": "^3.3.2"
 	}
 }

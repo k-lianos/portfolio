@@ -149,14 +149,6 @@ section {
 	padding: 0 0 8% 0;
 }
 
-.align-left {
-	text-align: left;
-}
-
-.align-right {
-	text-align: right;
-}
-
 .container {
 	max-width: 1200px;
 	margin: 0 auto;
@@ -164,14 +156,6 @@ section {
 
 .services p {
 	text-align: justify;
-}
-
-.services .angular-wizard {
-	display: flex;
-}
-
-.services .angular-description {
-	flex: 0 0 80%;
 }
 
 .services .angular-wizard svg {
