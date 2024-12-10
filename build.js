@@ -3,7 +3,7 @@ const path = require('path');
 
 // Define source and output folders
 const partialsFolder = path.join(__dirname, 'partials');
-const distFolder = path.join(__dirname, 'dist');
+const distFolder = path.join(__dirname, 'docs');
 
 // Ensure the dist folder exists
 if (!fs.existsSync(distFolder)) {
@@ -17,17 +17,15 @@ const combineHTML = () => {
 		let template = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
 
 		// Replace placeholders with partial HTML files
-		while (template.includes('@@include')) {
-			template = template.replace(/@@include\(['"](.+?)['"]\)/g, (match, fileName) => {
-				const filePath = path.join(__dirname, fileName);
-				if (fs.existsSync(filePath)) {
-					return fs.readFileSync(filePath, 'utf-8');
-				} else {
-					console.error(`File not found: ${fileName}`);
-					return '';
-				}
-			});
-		}
+		template = template.replace(/@@include\(['"](.+?)['"]\)/g, (match, fileName) => {
+			const filePath = path.join(__dirname, fileName);
+			if (fs.existsSync(filePath)) {
+				return fs.readFileSync(filePath, 'utf-8');
+			} else {
+				console.error(`File not found: ${fileName}`);
+				return '';
+			}
+		});
 
 		// Write combined HTML to output
 		fs.writeFileSync(path.join(distFolder, 'index.html'), template, 'utf-8');
@@ -39,7 +37,7 @@ const combineHTML = () => {
 
 const combineCSS = () => {
 	try {
-		const styles = ['base.css', 'header.css', 'footer.css', 'services.css', 'about.css', 'hire-me.css']
+		const styles = ['base.css', 'header.css', 'footer.css', 'services.css', 'about.css']
 			.map(fileName => path.join(partialsFolder, fileName))
 			.map(filePath => fs.readFileSync(filePath, 'utf-8'))
 			.join('\n');
