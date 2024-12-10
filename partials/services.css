@@ -2,14 +2,14 @@
 	text-align: justify;
 }
 
-.services h2 {
+.services h3 {
 	display: flex;
 	gap: 1rem;
 }
 
 .services svg {
 	fill: var(--black);
-	width: 50px;
+	width: 3rem;
 }
 
 .services .services--angular svg {
@@ -30,4 +30,9 @@
 
 .services .services--all-js svg#vue {
 	fill: rgba(66, 184, 131, 1);
+}
+
+.services span.technology {
+	font-weight: 700;
+	font-style: italic;
 }
