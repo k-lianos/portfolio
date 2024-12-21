@@ -19,7 +19,7 @@ const combineHTML = () => {
 		while (template.includes('@@include')) {
 			// Replace placeholders with partial HTML files
 			template = template.replace(/@@include\(['"](.+?)['"]\)/g, (match, fileName) => {
-				const filePath = path.join(__dirname, fileName);
+				const filePath = path.join(partialsFolder, fileName);
 				if (fs.existsSync(filePath)) {
 					return fs.readFileSync(filePath, 'utf-8');
 				} else {
