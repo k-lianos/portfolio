@@ -39,7 +39,7 @@ const combineHTML = () => {
 
 const combineCSS = () => {
 	try {
-		const styles = ['base.css', 'header.css', 'footer.css', 'services.css', 'about.css', 'hire-me.css']
+		const styles = ['base.css', 'header.css', 'footer.css', 'services.css', 'about.css', 'hire-me.css', 'timeline.css']
 			.map(fileName => path.join(partialsFolder, fileName))
 			.map(filePath => fs.readFileSync(filePath, 'utf-8'))
 			.join('\n');
