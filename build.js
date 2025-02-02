@@ -71,8 +71,21 @@ const combineCSS = () => {
 	}
 };
 
+const copyFavicon = () => {
+	const sourcePath = path.join(svgFolder, 'ng-k.svg');
+	const destinationPath = path.join(distFolder, 'favicon.svg');
+	fs.copyFile(sourcePath, destinationPath, err => {
+		if (err) {
+			console.error('Error copying the file:', err);
+		} else {
+			console.log('SVG file copied successfully!');
+		}
+	});
+};
+
 // Run the combining function
 let template = combineHTML();
 template = replaceSvgTags(template);
 fs.writeFileSync(path.join(distFolder, 'index.html'), template, 'utf-8');
 combineCSS();
+copyFavicon();
