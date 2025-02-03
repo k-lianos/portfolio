@@ -10,76 +10,122 @@ const SOURCE_DIR = path.join(PROJECT_ROOT, 'src');
 const PARTIALS_DIR = path.join(SOURCE_DIR, 'partials');
 const SVG_DIR = path.join(SOURCE_DIR, 'svg');
 
-// Read and combine HTML parts
-const combineHTML = () => {
-	const PartialTag = TemplateTags.Partial.description;
-
+/**
+ * Reads the content of a file synchronously.
+ * Logs an error and returns an empty string if the file cannot be read.
+ */
+const getFileContent = (filePath, fileDescription = filePath) => {
 	try {
-		// Load the main template file
-		let template = fs.readFileSync(path.join(SOURCE_DIR, 'index.html'), 'utf-8');
-		const partialNameRegex = new RegExp(`${PartialTag}\\([\'"](.+?)[\'"]\\)`, 'g');
-
-		while (template.includes(PartialTag)) {
-			// Replace placeholders with partial HTML files
-			template = template.replace(partialNameRegex, (match, fileName) => {
-				const filePath = path.join(PARTIALS_DIR, `${fileName}.html`);
-				if (fs.existsSync(filePath)) {
-					return fs.readFileSync(filePath, 'utf-8');
-				} else {
-					console.error(`File not found: ${fileName}`);
-					return '';
-				}
-			});
-		}
-
-		console.log(`Combined HTML`);
-		return template;
-
-		// Write combined HTML to output
-	} catch (err) {
-		console.error('Error combining HTML:', err);
+		return fs.readFileSync(filePath, 'utf-8');
+	} catch (error) {
+		console.error(`Error reading file "${fileDescription}": ${error.message}`);
+		return '';
 	}
 };
 
-const replaceSvgTags = template => {
-	const svgNameRegex = new RegExp(`${TemplateTags.Svg.description}\\([\'"](.+?)[\'"]\\)`, 'g');
-	template = template.replace(/@@svg\(['"](.+?)['"]\)/g, (match, fileName) => {
-		const filePath = path.join(SVG_DIR, `${fileName}.svg`);
-		if (fs.existsSync(filePath)) {
-			return fs.readFileSync(filePath, 'utf-8');
-		} else {
-			console.error(`File not found: ${fileName}`);
-			return '';
-		}
-	});
-	console.log(`Replaced all SVG tags`);
+/**
+ * Recursively replaces partial placeholders in the template with the actual HTML content.
+ * Returns the content of a single HTML file.
+ */
+const combineHTML = template => {
+	const partialTag = TemplateTags.Partial.description;
+	// Regex to match something like: @@partial('filename')
+	const partialRegex = new RegExp(`${partialTag}\\(['"](.+?)['"]\\)`, 'g');
+
+	while (template.includes(partialTag)) {
+		template = template.replace(partialRegex, (match, fileName) => {
+			const filePath = path.join(PARTIALS_DIR, `${fileName}.html`);
+			if (fs.existsSync(filePath)) {
+				return getFileContent(filePath, fileName);
+			} else {
+				console.error(`Partial file not found: ${fileName} (${filePath})`);
+				return '';
+			}
+		});
+	}
+
+	console.log('Combined HTML successfully.');
 	return template;
 };
 
-const combineCSS = () => {
-	try {
-		const styles = ['base.css', 'header.css', 'footer.css', 'services.css', 'about.css', 'hire-me.css', 'timeline.css']
-			.map(fileName => path.join(PARTIALS_DIR, fileName))
-			.map(filePath => fs.readFileSync(filePath, 'utf-8'))
-			.join('\n');
+/**
+ * Replaces SVG tag placeholders in the template with the actual SVG content.
+ */
+const replaceSvgTags = template => {
+	const svgTag = TemplateTags.Svg.description;
+	// Regex to match something like: @@svg("filename")
+	const svgRegex = new RegExp(`${svgTag}\\((['"])(.+?)\\1\\)`, 'g');
 
-		fs.writeFileSync(path.join(DIST_DIR, 'styles.css'), styles, 'utf-8');
-		console.log(`Combined CSS written to ${path.join(DIST_DIR, 'styles.css')}`);
-	} catch (err) {
-		console.error('Error combining CSS:', err);
-	}
+	template = template.replace(svgRegex, (match, quote, fileName) => {
+		const filePath = path.join(SVG_DIR, `${fileName}.svg`);
+		if (fs.existsSync(filePath)) {
+			return getFileContent(filePath, fileName);
+		} else {
+			console.error(`SVG file not found: ${fileName} (${filePath})`);
+			return '';
+		}
+	});
+
+	console.log('Replaced all SVG tags successfully.');
+	return template;
 };
 
+/**
+ * Combines multiple CSS files into a single stylesheet.
+ */
+const combineCSS = () => {
+	const cssFiles = ['base.css', 'header.css', 'footer.css', 'services.css', 'about.css', 'hire-me.css', 'timeline.css'];
+
+	const combinedCSS = cssFiles
+		.map(fileName => {
+			const filePath = path.join(PARTIALS_DIR, fileName);
+			if (fs.existsSync(filePath)) {
+				return getFileContent(filePath, fileName);
+			} else {
+				console.error(`CSS file not found: ${fileName} (${filePath})`);
+				return '';
+			}
+		})
+		.join('\n');
+
+	console.log('Combined CSS');
+	return combinedCSS;
+};
+
+const replaceStyleTag = (template, styles) => {
+	template = template.replace(new RegExp(TemplateTags.Style.description), () => `<style>${styles}</style>`);
+	console.log('Injected CSS styles in template');
+	return template;
+};
+
+/**
+ * Copies the favicon SVG from the source to the destination directory.
+ */
 const copyFavicon = () => {
 	const sourcePath = path.join(SVG_DIR, 'ng-k.svg');
 	const destinationPath = path.join(DIST_DIR, 'favicon.svg');
-	fs.copyFile(sourcePath, destinationPath, err => {
-		if (err) {
-			console.error('Error copying the file:', err);
-		} else {
-			console.log('SVG file copied successfully!');
-		}
-	});
+	try {
+		fs.copyFileSync(sourcePath, destinationPath);
+		console.log('Favicon SVG copied successfully.');
+	} catch (err) {
+		console.error('Error copying favicon SVG:', err);
+	}
+};
+
+const build = () => {
+	copyFavicon(); // copy the favicon file in the distribution folder
+
+	let template = getFileContent(path.join(SOURCE_DIR, 'index.html'), 'index.html');
+
+	template = combineHTML(template);
+
+	template = replaceSvgTags(template);
+
+	const styles = combineCSS(); // combine CSS files in one large css file
+
+	template = replaceStyleTag(template, styles);
+
+	fs.writeFileSync(path.join(DIST_DIR, 'index.html'), template, 'utf-8'); // Write final HTML to distribution directory
 };
 
 // Ensure the dist folder exists
@@ -87,9 +133,8 @@ if (!fs.existsSync(DIST_DIR)) {
 	fs.mkdirSync(DIST_DIR);
 }
 
-// Run the combining function
-let template = combineHTML();
-template = replaceSvgTags(template);
-fs.writeFileSync(path.join(DIST_DIR, 'index.html'), template, 'utf-8');
-combineCSS();
-copyFavicon();
+console.log('**** BUILD.start ****');
+console.log('_____________________');
+build();
+console.log('_____________________');
+console.log('****  BUILD.end  ****');
