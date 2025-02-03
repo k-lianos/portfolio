@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 
+import { minify } from 'html-minifier-terser';
+
 import { TemplateTags } from './template-tags.enum.js';
 
 const PROJECT_ROOT = url.fileURLToPath(new URL('../', import.meta.url));
@@ -112,7 +114,7 @@ const copyFavicon = () => {
 	}
 };
 
-const build = () => {
+const build = async (prod = false) => {
 	copyFavicon(); // copy the favicon file in the distribution folder
 
 	let template = getFileContent(path.join(SOURCE_DIR, 'index.html'), 'index.html');
@@ -125,6 +127,11 @@ const build = () => {
 
 	template = replaceStyleTag(template, styles);
 
+	if (prod) {
+		template = await minify(template, { collapseWhitespace: true, removeComments: true, minifyCSS: true });
+		console.log('Minified HTML template and styles');
+	}
+
 	fs.writeFileSync(path.join(DIST_DIR, 'index.html'), template, 'utf-8'); // Write final HTML to distribution directory
 };
 
@@ -133,8 +140,11 @@ if (!fs.existsSync(DIST_DIR)) {
 	fs.mkdirSync(DIST_DIR);
 }
 
-console.log('**** BUILD.start ****');
-console.log('_____________________');
-build();
-console.log('_____________________');
-console.log('****  BUILD.end  ****');
+(async () => {
+	console.log('**** BUILD.start ****');
+	console.log('_____________________');
+	const productionBuild = process.argv.includes('--prod');
+	await build(productionBuild);
+	console.log('_____________________');
+	console.log('****  BUILD.end  ****');
+})();
