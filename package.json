@@ -11,11 +11,10 @@
     "prestart": "npm run cleanup && npm run build",
     "start": "chokidar \"src/**/*.{html,css,svg}\" -c \"npm run build\" & live-server dist",
     "build": "node scripts/build.js",
-    "build:prod": "npm run svg:optimize && npm run build -- --prod",
+    "build:prod": "npm run build -- --prod",
     "serve": "npm run cleanup && npm run build && live-server docs",
     "serve:prod": "npm run cleanup && npm run build:prod && live-server docs",
     "cleanup": "rimraf docs",
-    "svg:optimize": "svgo src/svg/*",
     "prepare": "husky install"
   },
   "keywords": [],
