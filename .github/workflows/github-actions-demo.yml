@@ -1,1 +1,33 @@
+name: Build and Deploy to GitHub Pages
 
+on:
+    push:
+        branches:
+            - main # Trigger this workflow on pushes to main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            # If you're using Node.js:
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '22' # or your required version
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build the site
+              run: npm run build:prod # Replace with your actual build command
+
+            # Deploy the build output using the gh-pages action
+            - name: Deploy to GitHub Pages
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./docs # Replace with your actual output directory
