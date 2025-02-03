@@ -7,7 +7,7 @@ import { minify } from 'html-minifier-terser';
 import { TemplateTags } from './template-tags.enum.js';
 
 const PROJECT_ROOT = url.fileURLToPath(new URL('../', import.meta.url));
-const DIST_DIR = path.join(PROJECT_ROOT, 'docs');
+const DIST_DIR = path.join(PROJECT_ROOT, 'dist');
 const SOURCE_DIR = path.join(PROJECT_ROOT, 'src');
 const PARTIALS_DIR = path.join(SOURCE_DIR, 'partials');
 const SVG_DIR = path.join(SOURCE_DIR, 'svg');
