@@ -6,8 +6,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define source and output folders
-const partialsFolder = path.join(__dirname, 'partials');
-const svgFolder = path.join(__dirname, 'svg');
+const partialsFolder = path.join(__dirname, 'src/partials');
+const svgFolder = path.join(__dirname, 'src/svg');
 const distFolder = path.join(__dirname, 'docs');
 
 // Ensure the dist folder exists
