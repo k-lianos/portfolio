@@ -4,16 +4,18 @@
 	"type": "module",
 	"description": "",
 	"scripts": {
-		"build": "node ./build.js",
-		"build:prod": "npm run cleanup && npm run build",
+		"start": "chokidar \"index.html\" \"src/**/*.{html,css,svg}\" -c \"node build.js\" & live-server docs",
+		"build": "npm run cleanup && npm run svg:optimize && npm run build",
 		"cleanup": "rimraf docs",
-		"svg:optimize": "svgo ./svg/*",
-		"format": "npm run svg:optimize && prettier --write \"{,partials/**/}*.{md,json,css,js,html,yml}\""
+		"svg:optimize": "svgo src/svg/*",
+		"format": "npm run svg:optimize && prettier --write \"{,src/partials/**/}*.{md,json,css,js,html,yml}\""
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
+		"chokidar-cli": "^3.0.0",
+		"live-server": "^1.2.0",
 		"prettier": "^3.4.2",
 		"rimraf": "^6.0.1",
 		"svgo": "^3.3.2"
