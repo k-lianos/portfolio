@@ -17,12 +17,12 @@ const SVG_DIR = path.join(SOURCE_DIR, 'svg');
  * Logs an error and returns an empty string if the file cannot be read.
  */
 const getFileContent = (filePath, fileDescription = filePath) => {
-	try {
-		return fs.readFileSync(filePath, 'utf-8');
-	} catch (error) {
-		console.error(`Error reading file "${fileDescription}": ${error.message}`);
-		return '';
-	}
+  try {
+    return fs.readFileSync(filePath, 'utf-8');
+  } catch (error) {
+    console.error(`Error reading file "${fileDescription}": ${error.message}`);
+    return '';
+  }
 };
 
 /**
@@ -30,121 +30,121 @@ const getFileContent = (filePath, fileDescription = filePath) => {
  * Returns the content of a single HTML file.
  */
 const combineHTML = template => {
-	const partialTag = TemplateTags.Partial.description;
-	// Regex to match something like: @@partial('filename')
-	const partialRegex = new RegExp(`${partialTag}\\(['"](.+?)['"]\\)`, 'g');
+  const partialTag = TemplateTags.Partial.description;
+  // Regex to match something like: @@partial('filename')
+  const partialRegex = new RegExp(`${partialTag}\\(['"](.+?)['"]\\)`, 'g');
 
-	while (template.includes(partialTag)) {
-		template = template.replace(partialRegex, (match, fileName) => {
-			const filePath = path.join(PARTIALS_DIR, `${fileName}.html`);
-			if (fs.existsSync(filePath)) {
-				return getFileContent(filePath, fileName);
-			} else {
-				console.error(`Partial file not found: ${fileName} (${filePath})`);
-				return '';
-			}
-		});
-	}
+  while (template.includes(partialTag)) {
+    template = template.replace(partialRegex, (match, fileName) => {
+      const filePath = path.join(PARTIALS_DIR, `${fileName}.html`);
+      if (fs.existsSync(filePath)) {
+        return getFileContent(filePath, fileName);
+      } else {
+        console.error(`Partial file not found: ${fileName} (${filePath})`);
+        return '';
+      }
+    });
+  }
 
-	console.log('Combined HTML successfully.');
-	return template;
+  console.log('Combined HTML successfully.');
+  return template;
 };
 
 /**
  * Replaces SVG tag placeholders in the template with the actual SVG content.
  */
 const replaceSvgTags = template => {
-	const svgTag = TemplateTags.Svg.description;
-	// Regex to match something like: @@svg("filename")
-	const svgRegex = new RegExp(`${svgTag}\\((['"])(.+?)\\1\\)`, 'g');
+  const svgTag = TemplateTags.Svg.description;
+  // Regex to match something like: @@svg("filename")
+  const svgRegex = new RegExp(`${svgTag}\\((['"])(.+?)\\1\\)`, 'g');
 
-	template = template.replace(svgRegex, (match, quote, fileName) => {
-		const filePath = path.join(SVG_DIR, `${fileName}.svg`);
-		if (fs.existsSync(filePath)) {
-			return getFileContent(filePath, fileName);
-		} else {
-			console.error(`SVG file not found: ${fileName} (${filePath})`);
-			return '';
-		}
-	});
+  template = template.replace(svgRegex, (match, quote, fileName) => {
+    const filePath = path.join(SVG_DIR, `${fileName}.svg`);
+    if (fs.existsSync(filePath)) {
+      return getFileContent(filePath, fileName);
+    } else {
+      console.error(`SVG file not found: ${fileName} (${filePath})`);
+      return '';
+    }
+  });
 
-	console.log('Replaced all SVG tags successfully.');
-	return template;
+  console.log('Replaced all SVG tags successfully.');
+  return template;
 };
 
 /**
  * Combines multiple CSS files into a single stylesheet.
  */
 const combineCSS = () => {
-	const cssFiles = ['base.css', 'header.css', 'footer.css', 'services.css', 'about.css', 'hire-me.css', 'timeline.css'];
+  const cssFiles = ['base.css', 'header.css', 'footer.css', 'services.css', 'about.css', 'hire-me.css', 'timeline.css'];
 
-	const combinedCSS = cssFiles
-		.map(fileName => {
-			const filePath = path.join(PARTIALS_DIR, fileName);
-			if (fs.existsSync(filePath)) {
-				return getFileContent(filePath, fileName);
-			} else {
-				console.error(`CSS file not found: ${fileName} (${filePath})`);
-				return '';
-			}
-		})
-		.join('\n');
+  const combinedCSS = cssFiles
+    .map(fileName => {
+      const filePath = path.join(PARTIALS_DIR, fileName);
+      if (fs.existsSync(filePath)) {
+        return getFileContent(filePath, fileName);
+      } else {
+        console.error(`CSS file not found: ${fileName} (${filePath})`);
+        return '';
+      }
+    })
+    .join('\n');
 
-	console.log('Combined CSS');
-	return combinedCSS;
+  console.log('Combined CSS');
+  return combinedCSS;
 };
 
 const replaceStyleTag = (template, styles) => {
-	template = template.replace(new RegExp(TemplateTags.Style.description), () => `<style>${styles}</style>`);
-	console.log('Injected CSS styles in template');
-	return template;
+  template = template.replace(new RegExp(TemplateTags.Style.description), () => `<style>${styles}</style>`);
+  console.log('Injected CSS styles in template');
+  return template;
 };
 
 /**
  * Copies the favicon SVG from the source to the destination directory.
  */
 const copyFavicon = () => {
-	const sourcePath = path.join(SVG_DIR, 'ng-k.svg');
-	const destinationPath = path.join(DIST_DIR, 'favicon.svg');
-	try {
-		fs.copyFileSync(sourcePath, destinationPath);
-		console.log('Favicon SVG copied successfully.');
-	} catch (err) {
-		console.error('Error copying favicon SVG:', err);
-	}
+  const sourcePath = path.join(SVG_DIR, 'ng-k.svg');
+  const destinationPath = path.join(DIST_DIR, 'favicon.svg');
+  try {
+    fs.copyFileSync(sourcePath, destinationPath);
+    console.log('Favicon SVG copied successfully.');
+  } catch (err) {
+    console.error('Error copying favicon SVG:', err);
+  }
 };
 
 const build = async (prod = false) => {
-	copyFavicon(); // copy the favicon file in the distribution folder
+  copyFavicon(); // copy the favicon file in the distribution folder
 
-	let template = getFileContent(path.join(SOURCE_DIR, 'index.html'), 'index.html');
+  let template = getFileContent(path.join(SOURCE_DIR, 'index.html'), 'index.html');
 
-	template = combineHTML(template);
+  template = combineHTML(template);
 
-	template = replaceSvgTags(template);
+  template = replaceSvgTags(template);
 
-	const styles = combineCSS(); // combine CSS files in one large css file
+  const styles = combineCSS(); // combine CSS files in one large css file
 
-	template = replaceStyleTag(template, styles);
+  template = replaceStyleTag(template, styles);
 
-	if (prod) {
-		template = await minify(template, { collapseWhitespace: true, removeComments: true, minifyCSS: true });
-		console.log('Minified HTML template and styles');
-	}
+  if (prod) {
+    template = await minify(template, { collapseWhitespace: true, removeComments: true, minifyCSS: true });
+    console.log('Minified HTML template and styles');
+  }
 
-	fs.writeFileSync(path.join(DIST_DIR, 'index.html'), template, 'utf-8'); // Write final HTML to distribution directory
+  fs.writeFileSync(path.join(DIST_DIR, 'index.html'), template, 'utf-8'); // Write final HTML to distribution directory
 };
 
 // Ensure the dist folder exists
 if (!fs.existsSync(DIST_DIR)) {
-	fs.mkdirSync(DIST_DIR);
+  fs.mkdirSync(DIST_DIR);
 }
 
 (async () => {
-	console.log('**** BUILD.start ****');
-	console.log('_____________________');
-	const productionBuild = process.argv.includes('--prod');
-	await build(productionBuild);
-	console.log('_____________________');
-	console.log('****  BUILD.end  ****');
+  console.log('**** BUILD.start ****');
+  console.log('_____________________');
+  const productionBuild = process.argv.includes('--prod');
+  await build(productionBuild);
+  console.log('_____________________');
+  console.log('****  BUILD.end  ****');
 })();

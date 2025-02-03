@@ -1,23 +1,23 @@
 footer {
-	background-color: var(--black);
-	color: var(--white);
-	text-align: center;
-	padding: 6rem 0;
+  background-color: var(--black);
+  color: var(--white);
+  text-align: center;
+  padding: 6rem 0;
 }
 
 footer ul {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: center;
-	align-items: center;
-	gap: 3rem;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
 }
 
 footer svg {
-	width: 40px;
-	fill: var(--white);
+  width: 40px;
+  fill: var(--white);
 }
 
 footer a:hover svg {
-	fill: var(--orange);
+  fill: var(--orange);
 }
