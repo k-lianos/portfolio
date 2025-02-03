@@ -11,10 +11,10 @@
 	</head>
 
 	<body>
-		@@include('header.html')
+		@@partial('header')
 
-		<main>@@include('services.html') @@include('about.html') @@include('timeline.html')</main>
+		<main>@@partial('services') @@partial('about') @@partial('timeline')</main>
 
-		@@include('footer.html')
+		@@partial('footer')
 	</body>
 </html>

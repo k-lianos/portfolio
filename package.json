@@ -1,11 +1,16 @@
 {
 	"name": "portfolio",
 	"version": "1.0.0",
+	"engines": {
+		"node": "22.12.0",
+		"npm": "10.9.0"
+	},
 	"type": "module",
 	"description": "",
 	"scripts": {
-		"start": "chokidar \"index.html\" \"src/**/*.{html,css,svg}\" -c \"node build.js\" & live-server docs",
-		"build": "npm run cleanup && npm run svg:optimize && npm run build",
+		"start": "chokidar \"src/**/*.{html,css,svg}\" -c \"npm run build\" & live-server docs",
+		"build": "node scripts/build.js",
+		"build:prod": "npm run cleanup && npm run svg:optimize && npm run build",
 		"cleanup": "rimraf docs",
 		"svg:optimize": "svgo src/svg/*",
 		"format": "npm run svg:optimize && prettier --write \"{,src/partials/**/}*.{md,json,css,js,html,yml}\""
