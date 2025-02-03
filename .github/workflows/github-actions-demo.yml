@@ -1,33 +1,31 @@
-name: Build and Deploy to GitHub Pages
+name: Deploy Portfolio site to Pages
 
 on:
-    push:
-        branches:
-            - main # Trigger this workflow on pushes to main
+  push:
+    branches:
+      - main  # Change to your default branch if different
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-            # If you're using Node.js:
-            - name: Set up Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: '22' # or your required version
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'  # Use your desired Node.js version
 
-            - name: Install dependencies
-              run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-            - name: Build the site
-              run: npm run build:prod # Replace with your actual build command
+      - name: Run Build Script
+        run: npm run build:prod  # Ensure this script generates your static HTML in 'dist' or 'build'
 
-            # Deploy the build output using the gh-pages action
-            - name: Deploy to GitHub Pages
-              uses: peaceiris/actions-gh-pages@v3
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  publish_dir: ./docs # Replace with your actual output directory
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist  # Change to your output directory if different
